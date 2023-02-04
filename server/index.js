@@ -3,8 +3,6 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/auth");
 const messageRoutes = require("./routes/messages");
-const configRoutes = require("./routes/config");
-const routesRoutes = require("./routes/routes");
 const app = express();
 const socket = require("socket.io");
 require("dotenv").config();
@@ -24,8 +22,6 @@ const connectDatabase = async () => {
 connectDatabase();
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
-app.use("/api/config", configRoutes);
-app.use("/api/routes", routesRoutes);
 
 const server = app.listen(process.env.PORT, () =>
   console.log(`Server started on ${process.env.PORT}`)
