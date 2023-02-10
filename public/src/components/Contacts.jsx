@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Logo from "../assets/logo.svg";
+import {roomsRoute} from "../utils/APIRoutes";
+import axios from "axios";
+import Logout from "./Logout";
 
 export default function Contacts({ contacts, changeChat }) {
   const [currentUserName, setCurrentUserName] = useState(undefined);
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
   const [currentSelected, setCurrentSelected] = useState(undefined);
+  const [roomList, setRoomList] = useState([]);
   useEffect(async () => {
     const data = await JSON.parse(
       localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
     );
+    const rooms = await axios.get(`${roomsRoute}`);
+    setRoomList(rooms.data);
     setCurrentUserName(data.username);
     setCurrentUserImage(data.avatarImage);
   }, []);
@@ -26,27 +32,32 @@ export default function Contacts({ contacts, changeChat }) {
             <h3>snappy</h3>
           </div>
           <div className="contacts">
-            {contacts.map((contact, index) => {
-              return (
-                <div
-                  key={contact._id}
-                  className={`contact ${
-                    index === currentSelected ? "selected" : ""
-                  }`}
-                  onClick={() => changeCurrentChat(index, contact)}
-                >
-                  <div className="avatar">
-                    <img
-                      src={`data:image/svg+xml;base64,${contact.avatarImage}`}
-                      alt=""
-                    />
-                  </div>
-                  <div className="username">
-                    <h3>{contact.username}</h3>
-                  </div>
-                </div>
-              );
-            })}
+            <div className="brand">
+                {roomList.map(elem => {
+                  return <h3><a href={`/room/${elem._id}`}>{elem.roomName}</a></h3>
+                })}
+            </div>
+            {/*{contacts.map((contact, index) => {*/}
+            {/*  return (*/}
+            {/*    <div*/}
+            {/*      key={contact._id}*/}
+            {/*      className={`contact ${*/}
+            {/*        index === currentSelected ? "selected" : ""*/}
+            {/*      }`}*/}
+            {/*      onClick={() => changeCurrentChat(index, contact)}*/}
+            {/*    >*/}
+            {/*      <div className="avatar">*/}
+            {/*        <img*/}
+            {/*          src={`data:image/svg+xml;base64,${contact.avatarImage}`}*/}
+            {/*          alt=""*/}
+            {/*        />*/}
+            {/*      </div>*/}
+            {/*      <div className="username">*/}
+            {/*        <h3>{contact.username}</h3>*/}
+            {/*      </div>*/}
+            {/*    </div>*/}
+            {/*  );*/}
+            {/*})}*/}
           </div>
           <div className="current-user">
             <div className="avatar">
@@ -58,6 +69,7 @@ export default function Contacts({ contacts, changeChat }) {
             <div className="username">
               <h2>{currentUserName}</h2>
             </div>
+            <Logout/>
           </div>
         </Container>
       )}
@@ -86,7 +98,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow: auto;
+    //overflow: auto;
     gap: 0.8rem;
     &::-webkit-scrollbar {
       width: 0.2rem;
@@ -100,7 +112,7 @@ const Container = styled.div`
       background-color: #ffffff34;
       min-height: 5rem;
       cursor: pointer;
-      width: 90%;
+      width: 100%;
       border-radius: 0.2rem;
       padding: 0.4rem;
       display: flex;

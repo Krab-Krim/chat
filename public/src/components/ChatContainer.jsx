@@ -5,7 +5,6 @@ import Logout from "./Logout";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { sendMessageRoute, recieveMessageRoute } from "../utils/APIRoutes";
-import CopyLink from "./CopyLink";
 
 export default function ChatContainer({ currentChat, socket }) {
   const [messages, setMessages] = useState([]);
@@ -84,8 +83,7 @@ export default function ChatContainer({ currentChat, socket }) {
             <h3>{currentChat.username}</h3>
           </div>
         </div>
-        <CopyLink />
-        <Logout />
+        {/*<Logout />*/}
       </div>
       <div className="chat-messages">
         {messages.map((message) => {
